@@ -8,7 +8,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchCrimes = async () => {
       try {
-        const response = await axios.get("https://crime-report-app-production.up.railway.app/api/v1/report/0");
+        const response = await axios.get("http://localhost:8080/api/v1/report/0");
         const sortedCrimes = response.data.data.sort((a, b) => new Date(b.dateReported) - new Date(a.dateReported));
         setCrimes(sortedCrimes);
       } catch (error) {
@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   const handleResolveCrime = async (crimeId) => {
     try {
-      const response = await axios.put(`https://crime-report-app-production.up.railway.app/api/v1/report/${crimeId}`);
+      const response = await axios.put(`http://localhost:8080/api/v1/report/${crimeId}`);
 
       if (response.status === 200 && response.data.data) {
         const updatedCrimes = crimes.map((crime) =>

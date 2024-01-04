@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const navigation = [
   { name: "Register your address", href: "/add-crime-scene" },
+  { name: "Crime Codes", href: "/crimes" },
   { name: "Contact Us", href: "/contact" },
 ];
 
@@ -18,34 +19,22 @@ const AdminNavbar = () => {
   };
 
   const isAdmin = () => {
-    return localStorage.getItem("role") === "admin";
+    return localStorage.getItem("authenticated") === "true";
   };
 
   const handleLogout = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      // Send a request to the logout endpoint
-      const response = await axios.post("https://crime-report-app-production.up.railway.app/auth/logout", null, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (response.status === 200) {
-        localStorage.clear();
-        navigate("/");
-      }
-    } catch (error) {
-      console.error("Logout failed: ", error);
-      // Handle error here, e.g., show an error message to the user
-    }
+    localStorage.clear();
+    navigate("/");
   };
 
   return (
     <header className="bg-gradient-to-r from-red-500 to-yellow-500 text-white p-4">
       <nav className="flex items-center justify-between lg:px-8">
         <div className="flex lg:flex-1 items-center">
-          <a href="/" className="flex items-center text-2xl font-extrabold text-white">
+          <a
+            href="/"
+            className="flex items-center text-2xl font-extrabold text-white"
+          >
             CrimeWatch {/* Replace 'CrimeWatch' with your actual logo */}
           </a>
         </div>

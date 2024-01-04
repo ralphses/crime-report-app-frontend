@@ -6,11 +6,32 @@ const AddCrimeForm = () => {
   const [description, setDescription] = useState("");
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!description.trim()) {
+      newErrors.description = "Description is required";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleAddCrime = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       // Send a request to add a new crime
-      const response = await axios.post("https://crime-report-app-production.up.railway.app/api/v1/crime", {
+      const response = await axios.post("http://localhost:8080/api/v1/crime", {
         name,
         description,
       });
@@ -48,23 +69,29 @@ const AddCrimeForm = () => {
             <input
               type="text"
               id="name"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-indigo-500"
+              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:border-indigo-500 ${errors.name ? 'border-red-500' : ''}`}
               placeholder="Enter crime name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+            )}
           </div>
 
           <div className="mb-6">
             <label htmlFor="description" className="block text-gray-700 font-semibold mb-2">Description:</label>
             <textarea
               id="description"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-indigo-500"
+              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:border-indigo-500 ${errors.description ? 'border-red-500' : ''}`}
               placeholder="Enter crime description"
               rows="4"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
+            {errors.description && (
+              <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+            )}
           </div>
 
           <button
